@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>聊天</title>
+    <link rel="stylesheet" href="/static/chat.css">
+  </head>
+  <body>
+    <div class="chat-wrap">
+      <aside class="sessions">
+        <div class="sessions-header">
+          <h3>会话</h3>
+          <button id="newSession">新会话</button>
+        </div>
+        <ul id="sessionList"></ul>
+      </aside>
+
+      <main class="chat-main">
+        <div id="messages" class="messages"></div>
+        <div class="composer">
+          <input id="inputMsg" placeholder="输入消息..." />
+          <button id="sendBtn">发送</button>
+        </div>
+      </main>
+    </div>
+
+    <script src="/static/chat.js"></script>
+  </body>
+</html>
