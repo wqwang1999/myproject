@@ -13,6 +13,16 @@
     <div class="chat-app">
       <aside class="sidebar">
         <div class="brand">智聊</div>
+        {% if session.get('is_admin') %}
+        <div style="margin-top:6px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+          <a class="btn ghost" href="/admin/users">用户管理</a>
+          {% set pending = 0 %}
+          {% for k,v in USERS.items() %}
+            {% if not v.approved %}{% set pending = pending + 1 %}{% endif %}
+          {% endfor %}
+          <span id="pending-count" style="color:#ffdd57;margin-left:4px">{{ pending }}</span>
+        </div>
+        {% endif %}
         <div class="sessions">
           <div class="sessions-header">
             <h4>会话</h4>

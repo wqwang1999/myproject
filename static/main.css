@@ -36,3 +36,33 @@ canvas#starfield{position:fixed;inset:0;z-index:0;display:block}
   .logo{font-size:34px}
   .actions{flex-direction:column}
 }
+
+/* auth form alignment */
+.auth-form{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.auth-form label{font-size:13px;color:var(--accent-2);}
+.auth-form input{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+.auth-form .btn{align-self:center}
+
+/* button press animation */
+.btn{transition:transform .12s ease, box-shadow .12s ease}
+.btn.pressed{transform:translateY(2px) scale(.995);box-shadow:0 2px 6px rgba(0,0,0,0.2) inset}
+
+/* pending badge */
+#pending-count{font-weight:700}
+
+/* Users management styles */
+.users-grid{display:grid;grid-template-columns:1fr 1fr 380px;gap:22px;margin-top:20px}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+.panel h3{margin:0 0 10px 0;font-size:17px}
+.badge{background:#ffdd57;color:#092; padding:4px 10px;border-radius:14px;font-weight:700;margin-left:8px}
+.list{display:flex;flex-direction:column;gap:12px;max-height:380px;overflow:auto;padding-right:6px}
+.user-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
+.user-item.small{padding:8px}
+.user-info .uname{font-weight:700}
+.user-info .meta{font-size:13px;color:var(--muted)}
+.admin-tag{color:var(--accent);font-weight:700;margin-left:8px}
+.create-form{display:flex;flex-direction:column;gap:10px}
+.create-form input{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.empty{color:var(--muted);padding:8px}
+
+@media (max-width:1200px){.users-grid{grid-template-columns:1fr;}}

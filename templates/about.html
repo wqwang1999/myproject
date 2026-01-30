@@ -9,23 +9,33 @@
   <body>
     <canvas id="starfield"></canvas>
     <main class="hero about">
-      <div class="card">
+      <div class="card about-scroll">
         <h1 class="logo">关于我们</h1>
-        <p class="lead">我们是一支热衷于简洁与高效交互体验的小团队，致力于把 AI 与实时聊天结合，打造直观、低摩擦的产品原型。</p>
-        <section class="content">
-          <h2>愿景</h2>
-          <p>通过简单的界面，把复杂的对话能力带给每个人，让技术隐藏在体验之后。</p>
-          <h2>团队</h2>
-          <p>工程师、产品与设计师组成的多学科小组，快速迭代与测试想法。</p>
-          <h2>联系方式</h2>
-          <p>邮箱：contact@example.com（示例填充，请替换）</p>
-        </section>
+        <div class="about-sections">
+          <section class="reveal">
+            <h2>我们的愿景</h2>
+            <p>通过简单的界面，把复杂的对话能力带给每个人，让技术隐藏在体验之后。</p>
+          </section>
+          <section class="reveal">
+            <h2>团队</h2>
+            <p>工程师、产品与设计师组成的多学科小组，快速迭代与测试想法。</p>
+          </section>
+          <section class="reveal">
+            <h2>价值观</h2>
+            <p>简洁、高效、可解释。我们关注用户体验并持续优化交互。</p>
+          </section>
+          <section class="reveal">
+            <h2>联系方式</h2>
+            <p>邮箱：contact@example.com（示例填充，请替换）</p>
+          </section>
+        </div>
         <div class="actions">
           <a class="btn ghost" href="/">返回首页</a>
-          <a class="btn primary" href="/chat">开始聊天</a>
+          <a class="btn primary" href="/login">登录</a>
         </div>
       </div>
     </main>
     <script src="/static/main.js" defer></script>
+    <script src="/static/ui.js" defer></script>
   </body>
 </html>

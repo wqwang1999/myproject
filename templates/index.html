@@ -14,8 +14,14 @@
         <h1 class="logo">智聊</h1>
         <p class="tag">简约 · 即刻响应 · 科技感</p>
         <div class="actions">
-          <a class="btn primary" href="/chat">开始聊天</a>
-          <a class="btn ghost" href="/about">关于我们</a>
+          {% if session.get('username') %}
+            <a class="btn primary" href="/chat">开始聊天</a>
+            <a class="btn ghost" href="/logout">登出</a>
+          {% else %}
+            <a class="btn primary" href="/login">登录</a>
+            <a class="btn ghost" href="/register">注册</a>
+          {% endif %}
+          <a class="btn" href="/about">关于我们</a>
         </div>
       </div>
       <footer class="note">所有回复仅为示例，固定回答“你好”。</footer>
