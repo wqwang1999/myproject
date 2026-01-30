@@ -23,8 +23,9 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe U
 .input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
 .send{background:linear-gradient(90deg,var(--accent),#8a5cff);border:none;padding:10px 16px;border-radius:10px;font-weight:700;color:#021026}
 
-/* subtle animations */
-.msg{transform-origin: center;animation:pop .18s ease both}
-@keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+/* animations removed for static UI (instant appearance) */
+.msg{transform-origin: center;animation:none !important;opacity:1 !important}
+
+/* removed @keyframes pop to prevent slide/fade on message render */
 
 @media (max-width:800px){.sidebar{display:none}.msg{max-width:86%}}

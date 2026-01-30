@@ -7,46 +7,43 @@
     <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
-    <canvas id="starfield"></canvas>
-    <main class="hero">
+    <div class="shell">
       <div class="card">
-        <h1 class="logo">注册新用户</h1>
-        {% if error %}
-        <p class="tag" style="color:#ffb3b3">{{ error }}</p>
-        {% endif %}
-        <form method="post" class="auth-form">
-          <label>用户名（仅字母）</label>
-          <input name="username" required />
-          <label>密码（需包含字母与数字）</label>
-          <input name="password" type="password" required />
-          <label>邮箱</label>
-          <input name="email" type="email" required />
-          <label>备注（可选）</label>
-          <input name="note" />
-          <div style="margin-top:12px;display:flex;gap:10px;justify-content:center">
-            <button class="btn primary" type="submit">申请</button>
-            <a class="btn ghost" href="/">取消</a>
+        <div class="inner">
+          <div class="brand">
+            <img src="/static/logo.svg" alt="智聊">
+            <div class="title">注册新用户</div>
           </div>
-        </form>
-      </div>
-    </main>
-    <script src="/static/main.js" defer></script>
-    <script src="/static/ui.js" defer></script>
-    <div id="submitted-modal" class="modal" style="display: none;">
-      <div class="modal-card">
-        <h3>申请已提交</h3>
-        <p>您的账号已提交审核，管理员批准后即可登录，请耐心等候。</p>
-        <div style="margin-top:12px;text-align:center">
-          <a class="btn primary" href="/">返回首页</a>
+          {% if error %}
+          <p class="tag" style="color:#ffb3b3">{{ error }}</p>
+          {% endif %}
+          <form method="post" class="auth-form">
+            <label>用户名（仅字母）</label>
+            <input name="username" required />
+            <label>密码（需包含字母与数字，且长度不少于8位）</label>
+            <input name="password" type="password" required minlength="8" oninvalid="this.setCustomValidity('请注意密码格式')" oninput="this.setCustomValidity('')" />
+            <label>邮箱</label>
+            <input name="email" type="email" required />
+            <label>备注（可选）</label>
+            <input name="note" />
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:6px">
+              <button class="btn primary" type="submit">申请</button>
+              <a class="btn ghost" href="/">取消</a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+    <script src="/static/ui.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', function(){
+        // 添加表单提交处理，防止默认提交行为并显示模态框
         const submitted = {{ 'true' if submitted else 'false' }};
         if(submitted){
-          const m = document.getElementById('submitted-modal');
-          if(m) m.style.display='flex';
+          // 如果已经提交成功，则弹出浏览器对话框
+          alert("申请已提交\n\n您的账号已提交审核，管理员批准后将通过邮箱告知，请您耐心等候。");
+          // 跳转回首页
+          window.location.href = "/";
         }
       });
     </script>

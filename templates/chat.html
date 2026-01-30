@@ -6,11 +6,24 @@
     <title>智聊 — 聊天</title>
     <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="/static/chat.css">
-    <script src="/static/main.js" defer></script>
   </head>
   <body>
-    <canvas id="starfield"></canvas>
-    <div class="chat-app">
+    <div class="shell">
+      <div class="card" style="padding:18px">
+        <div class="inner" style="align-items:stretch">
+          <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <img src="/static/logo.svg" alt="智聊" style="height:40px">
+              <div style="font-weight:800;color:var(--accent)">智聊 — 聊天</div>
+            </div>
+            <div class="actions" style="justify-content:flex-end">
+              {% if session.get('is_admin') %}
+                <a class="btn ghost" href="/admin/users">用户管理</a>
+              {% endif %}
+              <a class="btn ghost" href="/logout">登出</a>
+            </div>
+          </div>
+          <div class="chat-app">
       <aside class="sidebar">
         <div class="brand">智聊</div>
         {% if session.get('is_admin') %}
@@ -45,9 +58,10 @@
           <input id="inputMsg" class="input" autocomplete="off" placeholder="输入消息，按 Enter 发送..." />
           <button id="sendBtn" class="send" type="button">发送</button>
         </form>
-      </main>
+          </div>
+        </div>
+      </div>
     </div>
-
     <script src="/static/chat.js"></script>
   </body>
 </html>

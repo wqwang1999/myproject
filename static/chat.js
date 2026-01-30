@@ -36,7 +36,8 @@ function renderMessages(msgs){
     box.appendChild(d);
   });
   // scroll to bottom smoothly
-  box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+  // instant scroll to bottom to avoid smooth animation
+  box.scrollTo({ top: box.scrollHeight, behavior: 'auto' });
 }
 
 let sending = false;

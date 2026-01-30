@@ -20,7 +20,7 @@
     const email = form.querySelector('[name=email]');
     let ok = true;
     if(!usernameRe.test(username.value.trim())){ showError(username,'用户名需仅包含英文字母'); ok=false;} else clearError(username);
-    if(!hasLetter.test(password.value) || !hasDigit.test(password.value)){ showError(password,'密码需同时包含字母和数字'); ok=false;} else clearError(password);
+    if(password.value.length < 8 || !hasLetter.test(password.value) || !hasDigit.test(password.value)){ showError(password,'密码需同时包含字母和数字，且长度至少8位'); ok=false;} else clearError(password);
     if(!emailRe.test(email.value.trim())){ showError(email,'邮箱格式不正确'); ok=false;} else clearError(email);
     return ok;
   }
@@ -94,18 +94,4 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(){ bindForms(); adminPolling(); });
-  
-  // Reveal on scroll using IntersectionObserver: elements with .reveal will get .visible
-  function setupReveal(){
-    const items = document.querySelectorAll('.reveal');
-    if(!items.length) return;
-    const obs = new IntersectionObserver((entries)=>{
-      entries.forEach(ent=>{
-        if(ent.isIntersecting){ ent.target.classList.add('visible'); }
-        else { ent.target.classList.remove('visible'); }
-      });
-    },{threshold:0.25});
-    items.forEach(it=>obs.observe(it));
-  }
-  document.addEventListener('DOMContentLoaded', setupReveal);
 })();

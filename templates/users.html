@@ -1,73 +1,85 @@
 <!doctype html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>用户管理 - 智聊</title>
-    <link rel="stylesheet" href="/static/main.css">
-  </head>
   <body>
-    <canvas id="starfield"></canvas>
-    <main class="hero about">
+    <div class="shell">
       <div class="card">
-        <h1 class="logo">用户管理</h1>
-        <p class="lead">管理员可在此查看与审批注册申请以及手动创建用户。</p>
+        <div class="inner" style="align-items:stretch">
+          <div class="brand" style="justify-content:center">
+            <img src="/static/logo.svg" alt="智聊">
+            <div class="title">用户管理</div>
+          </div>
+          <p class="tag">管理员可在此查看与审批注册申请以及手动创建用户。</p>
+          <div class="users-grid">
+            <div>
+              <details class="panel pending" open>
+                <summary><h3>待处理申请 <span class="badge">{{ users|selectattr('approved','equalto',False)|list|length }}</span></h3></summary>
+                <div class="panel-body">
+                  <div class="list">
+                    {% for u in users if not u.approved %}
+                    <div class="user-item">
+                      <div>
+                        <div class="uname">{{ u.username }}</div>
+                        <div class="meta">{{ u.email }} <small>{{ u.note }}</small></div>
+                      </div>
+                      <div style="display:flex;gap:8px">
+                        <form method="post"><input type="hidden" name="username" value="{{ u.username }}"><input type="hidden" name="action" value="approve"><button class="btn primary" type="submit">允许</button></form>
+                        <form method="post"><input type="hidden" name="username" value="{{ u.username }}"><input type="hidden" name="action" value="reject"><button class="btn ghost" type="submit">拒绝</button></form>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="empty">暂无待处理申请</div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </details>
 
-        <div class="users-grid">
-          <section class="panel pending">
-            <h3>待处理申请 <span class="badge">{{ users|selectattr('approved','equalto',False)|list|length }}</span></h3>
-            <div class="list">
-              {% for u in users if not u.approved %}
-              <div class="user-item">
-                <div class="user-info">
-                  <div class="uname">{{ u.username }}</div>
-                  <div class="meta">{{ u.email }} <small>{{ u.note }}</small></div>
+              <details class="panel current">
+                <summary><h3>当前用户</h3></summary>
+                <div class="panel-body">
+                  <div class="list">
+                    {% for u in users if u.approved %}
+                    <div class="user-item small">
+                      <div>
+                        <div class="uname">{{ u.username }} {% if u.is_admin %}<span class="admin-tag">(管理员)</span>{% endif %}</div>
+                        <div class="meta">{{ u.email }} <small>{{ u.note }}</small></div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
                 </div>
-                <div class="actions">
-                  <form method="post"><input type="hidden" name="username" value="{{ u.username }}"><input type="hidden" name="action" value="approve"><button class="btn primary" type="submit">允许</button></form>
-                  <form method="post"><input type="hidden" name="username" value="{{ u.username }}"><input type="hidden" name="action" value="reject"><button class="btn ghost" type="submit">拒绝</button></form>
-                </div>
-              </div>
-              {% else %}
-              <div class="empty">暂无待处理申请</div>
-              {% endfor %}
+              </details>
             </div>
-          </section>
 
-          <section class="panel current">
-            <h3>当前用户</h3>
-            <div class="list">
-              {% for u in users if u.approved %}
-              <div class="user-item small">
-                <div class="user-info">
-                  <div class="uname">{{ u.username }} {% if u.is_admin %}<span class="admin-tag">(管理员)</span>{% endif %}</div>
-                  <div class="meta">{{ u.email }} <small>{{ u.note }}</small></div>
+            <aside>
+              <details class="panel create" open>
+                <summary><h3>创建用户</h3></summary>
+                <div class="panel-body">
+                  <form method="post" class="create-form">
+                    <input type="hidden" name="action" value="create" />
+                    <label>用户名（仅字母）</label>
+                    <input name="username" required />
+                    <label>密码（需包含字母与数字）</label>
+                    <input name="password" type="password" required />
+                    <label>邮箱</label>
+                    <input name="email" type="email" required />
+                    <label>备注（可选）</label>
+                    <input name="note" />
+                    <label style="display:block;margin-top:8px"><input type="checkbox" name="is_admin" /> 设为管理员</label>
+                    <div style="margin-top:12px"><button class="btn primary" type="submit">创建</button></div>
+                  </form>
                 </div>
-              </div>
-              {% endfor %}
+              </details>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/static/ui.js" defer></script>
+              </form>
             </div>
-          </section>
-
-          <section class="panel create">
-            <h3>创建用户</h3>
-            <form method="post" class="create-form">
-              <input type="hidden" name="action" value="create" />
-              <label>用户名（仅字母）</label>
-              <input name="username" required />
-              <label>密码（需包含字母与数字）</label>
-              <input name="password" type="password" required />
-              <label>邮箱</label>
-              <input name="email" type="email" required />
-              <label>备注（可选）</label>
-              <input name="note" />
-              <label><input type="checkbox" name="is_admin" /> 设为管理员</label>
-              <div style="margin-top:12px"><button class="btn primary" type="submit">创建</button></div>
-            </form>
-          </section>
+          </details>
         </div>
       </div>
     </main>
-    <script src="/static/main.js" defer></script>
     <script src="/static/ui.js" defer></script>
   </body>
 </html>
