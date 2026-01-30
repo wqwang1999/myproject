@@ -3,14 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>聊天首页</title>
-    <link rel="stylesheet" href="/static/chat.css">
+    <title>智聊 — 简约科技</title>
+    <link rel="stylesheet" href="/static/main.css">
+    <script src="/static/main.js" defer></script>
   </head>
   <body>
-    <div class="container">
-      <h1>简单聊天网站</h1>
-      <p>示例：点击下面开始聊天，所有回复固定为“你好”。</p>
-      <a class="btn" href="/chat">开始聊天</a>
-    </div>
+    <canvas id="starfield"></canvas>
+    <main class="hero">
+      <div class="card">
+        <h1 class="logo">智聊</h1>
+        <p class="tag">简约 · 即刻响应 · 科技感</p>
+        <div class="actions">
+          <a class="btn primary" href="/chat">开始聊天</a>
+          <a class="btn ghost" href="/about">关于我们</a>
+        </div>
+      </div>
+      <footer class="note">所有回复仅为示例，固定回答“你好”。</footer>
+    </main>
   </body>
 </html>

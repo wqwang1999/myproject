@@ -3,25 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>聊天</title>
+    <title>智聊 — 聊天</title>
+    <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="/static/chat.css">
+    <script src="/static/main.js" defer></script>
   </head>
   <body>
-    <div class="chat-wrap">
-      <aside class="sessions">
-        <div class="sessions-header">
-          <h3>会话</h3>
-          <button id="newSession">新会话</button>
+    <canvas id="starfield"></canvas>
+    <div class="chat-app">
+      <aside class="sidebar">
+        <div class="brand">智聊</div>
+        <div class="sessions">
+          <div class="sessions-header">
+            <h4>会话</h4>
+            <button id="newSession" class="icon-btn">＋</button>
+          </div>
+          <ul id="sessionList" class="session-list"></ul>
         </div>
-        <ul id="sessionList"></ul>
+        <div class="sidebar-foot">版本 0.1</div>
       </aside>
 
-      <main class="chat-main">
-        <div id="messages" class="messages"></div>
-        <div class="composer">
-          <input id="inputMsg" placeholder="输入消息..." />
-          <button id="sendBtn">发送</button>
-        </div>
+      <main class="window">
+        <header class="chat-header">
+          <div class="title">即时聊天</div>
+          <div class="sub">示例机器人，所有回复为“你好”</div>
+        </header>
+
+        <section id="messages" class="messages" aria-live="polite"></section>
+
+        <form id="composer" class="composer" onsubmit="return false;">
+          <input id="inputMsg" class="input" autocomplete="off" placeholder="输入消息，按 Enter 发送..." />
+          <button id="sendBtn" class="send" type="button">发送</button>
+        </form>
       </main>
     </div>
 

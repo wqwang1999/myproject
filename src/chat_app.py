@@ -52,6 +52,11 @@ def get_or_create_session(req):
 def index():
     return render_template('index.html')
 
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/data')
 def showdata():
     return render_template('showdata.html')
