@@ -1,0 +1,281 @@
+.users-layout {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.users-main {
+  flex: 1;
+}
+
+.sidebar {
+  width: 320px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.badge {
+  background-color: #b6baff;
+  color: white;
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.user-list, .user-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.username {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.email, .note {
+  font-size: 14px;
+  color: #666;
+}
+
+.admin-badge {
+  background-color: #ff6b6b;
+  color: white;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #b6baff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #7e8bff;
+}
+
+.btn-secondary {
+  background-color: #e0e7ff;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background-color: #c9e7ff;
+}
+
+.btn-danger {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ff5252;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #b6baff;
+}
+
+.help-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+}
+
+.form-actions {
+  margin-top: 8px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  margin-bottom: 16px;
+  color: #b6baff;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.brand img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  margin-bottom: 12px;
+}
+
+.brand .title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* 添加返回登录链接样式 */
+.back-to-login {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #b6baff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.back-to-login:hover {
+  color: #7e8bff;
+  text-decoration: underline;
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.description {
+  color: #666;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .users-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+}
