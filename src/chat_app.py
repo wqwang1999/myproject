@@ -123,7 +123,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    next_url = request.args.get('next') or url_for('chat')
+    next_url = request.args.get('next') or url_for('dashboard')
     if request.method == 'POST':
         username = (request.form.get('username') or '').strip()
         password = (request.form.get('password') or '').strip()
@@ -215,7 +215,7 @@ def api_sessions():
 
 
 @app.route('/admin/users', methods=['GET', 'POST'])
-@admin_required
+@admin_required  # 确保只有管理员可以访问
 def admin_users():
     # admin can view and create users here (simple prototype)
     # 支持三种 POST 行为：创建用户（create），批准 pending（approve），拒绝 pending（reject）
@@ -275,6 +275,11 @@ def api_pending_count():
     cnt = sum(1 for v in USERS.values() if not v.get('approved', False))
     return jsonify({'pending': cnt})
 
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 
 @app.context_processor

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能助手平台</title>
+    <link rel="stylesheet" href="/static/dashboard.css">
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- 顶部区域 - Logo和用户信息 -->
+      <header class="top-bar">
+        <div class="logo-section">
+          <img src="/static/logo.svg" alt="智能助手平台" class="logo">
+          <h1>智能助手平台</h1>
+        </div>
+        <div class="user-section">
+          <div class="user-info">
+            <div class="avatar">
+              <a href="/profile">
+                <img src="{{ session.avatar or '/static/default_user.jpg' }}" alt="用户头像" onerror="this.src='/static/default_user.jpg'" width="40" height="40">
+              </a>
+            </div>
+            <div class="user-details">
+              <span class="username">{{ session.username }}</span>
+              <span class="user-role">{% if session.is_admin %}管理员{% else %}普通用户{% endif %}</span>
+            </div>
+          </div>
+          <div class="user-actions">
+            {% if session.is_admin %}
+            {% endif %}
+            <a href="/logout" class="btn danger brick exit-button">退出登录</a>
+          </div>
+        </div>
+      </header>
+
+      <!-- 主要内容区域 -->
+      <div class="main-content">
+        <!-- 左侧区域 - 时间和日历 -->
+        <div class="left-panel">
+          <div class="time-calendar-section">
+            <div class="current-time" id="currentTime"></div>
+            <div class="current-date" id="currentDate"></div>
+            <div class="calendar-section">
+              <div class="calendar-header">
+                <button id="prevMonth">&lt;</button>
+                <span id="calendarTitle"></span>
+                <button id="nextMonth">&gt;</button>
+              </div>
+              <div class="calendar" id="calendar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中间区域 - 平台介绍 -->
+        <div class="center-panel">
+          <div class="welcome-section">
+            <h2>欢迎使用智能助手平台</h2>
+            <p class="intro-text">
+              这是一个集成了多种AI功能的智能平台，为您提供便捷的生活服务。
+              无论是日常聊天、信息查询还是专业咨询，我们都能为您提供优质的服务体验。
+            </p>
+            <div class="features-highlight">
+              <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>智能对话</h3>
+                <p>与AI进行自然语言交流</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>金融资讯</h3>
+                <p>实时股市行情和分析</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3>健康咨询</h3>
+                <p>医疗信息查询和建议</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧区域 - 功能入口 -->
+        <div class="right-panel">
+          <div class="functions-section">
+            <h2>功能中心</h2>
+            <div class="function-grid">
+              <a href="/chat" class="function-card active">
+                <div class="function-icon">🤖</div>
+                <h3>开始智聊</h3>
+                <p>与AI助手进行对话</p>
+              </a>
+              <a href="/stock" class="function-card active">
+                <div class="function-icon">📊</div>
+                <h3>查看股市</h3>
+                <p>实时股票行情查询</p>
+              </a>
+              <a href="/health" class="function-card active">
+                <div class="function-icon">💊</div>
+                <h3>医疗信息</h3>
+                <p>健康咨询与医疗查询</p>
+              </a>
+              <!-- 待开放接口1 -->
+              <div class="function-card disabled">
+                <div class="function-icon">🚀</div>
+                <h3>新功能1</h3>
+                <p>即将上线的功能</p>
+              </div>
+              <!-- 待开放接口2 -->
+              <div class="function-card disabled">
+                <div class="function-icon">💡</div>
+                <h3>新功能2</h3>
+                <p>即将上线的功能</p>
+              </div>
+              <!-- 管理员用户管理 -->
+              {% if session.is_admin %}
+              <a href="/admin/users" class="function-card">
+                <div class="function-icon">👥</div>
+                <h3>用户管理</h3>
+                <p>管理员专用功能</p>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 底部区域 - 版权信息 -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="copyright">
+            <p>&copy; 2023 智能助手平台. 保留所有权利.</p>
+          </div>
+          <div class="footer-links">
+            <a href="/about" class="btn btn-outline">关于我们</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/static/dashboard.js"></script>
+  </body>
+</html>

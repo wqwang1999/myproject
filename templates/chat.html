@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>智聊 — 聊天</title>
-    <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="/static/chat.css">
   </head>
   <body>
@@ -17,25 +16,12 @@
               <div style="font-weight:800;color:var(--accent)">智聊 — 聊天</div>
             </div>
             <div class="actions" style="justify-content:flex-end">
-              {% if session.get('is_admin') %}
-                <a class="btn ghost" href="/admin/users">用户管理</a>
-              {% endif %}
-              <a class="btn ghost" href="/logout">登出</a>
+              <a class="btn primary" href="/dashboard">返回菜单</a>
             </div>
           </div>
           <div class="chat-app">
       <aside class="sidebar">
         <div class="brand">智聊</div>
-        {% if session.get('is_admin') %}
-        <div style="margin-top:6px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
-          <a class="btn ghost" href="/admin/users">用户管理</a>
-          {% set pending = 0 %}
-          {% for k,v in USERS.items() %}
-            {% if not v.approved %}{% set pending = pending + 1 %}{% endif %}
-          {% endfor %}
-          <span id="pending-count" style="color:#ffdd57;margin-left:4px">{{ pending }}</span>
-        </div>
-        {% endif %}
         <div class="sessions">
           <div class="sessions-header">
             <h4>会话</h4>
@@ -49,7 +35,7 @@
       <main class="window">
         <header class="chat-header">
           <div class="title">即时聊天</div>
-          <div class="sub">示例机器人，所有回复为“你好”</div>
+          <div class="sub">示例机器人，所有回复为"你好"</div>
         </header>
 
         <section id="messages" class="messages" aria-live="polite"></section>
