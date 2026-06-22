@@ -40,14 +40,184 @@
 
         <section id="messages" class="messages" aria-live="polite"></section>
 
-        <form id="composer" class="composer" onsubmit="return false;">
+        <form id="composer" class="composer" onsubmit="sendMessage(event)">
           <input id="inputMsg" class="input" autocomplete="off" placeholder="输入消息，按 Enter 发送..." />
-          <button id="sendBtn" class="send" type="button">发送</button>
+          <button id="sendBtn" class="send" type="submit">发送</button>
         </form>
+      </main>
           </div>
         </div>
       </div>
     </div>
     <script src="/static/chat.js"></script>
+    <script>
+      // 全局变量存储当前会话ID
+      let currentSessionId = null;
+      
+      // 页面加载完成后初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        // 从cookie获取会话ID或创建新的
+        currentSessionId = getCookie('chat_sid');
+        if (!currentSessionId) {
+          currentSessionId = generateSessionId();
+          setCookie('chat_sid', currentSessionId, 7);
+        }
+        
+        // 加载历史消息
+        loadHistory();
+        
+        // 确保输入框和发送按钮可见
+        const inputElement = document.getElementById('inputMsg');
+        const sendButton = document.getElementById('sendBtn');
+        
+        if (inputElement) {
+          inputElement.style.display = 'block';
+          inputElement.style.visibility = 'visible';
+        }
+        
+        if (sendButton) {
+          sendButton.style.display = 'block';
+          sendButton.style.visibility = 'visible';
+        }
+        
+        // 绑定发送按钮事件
+        if (sendButton) {
+          sendButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            sendMessage();
+          });
+        }
+        
+        // 绑定回车键发送
+        if (inputElement) {
+          inputElement.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              sendMessage();
+            }
+          });
+        }
+      });
+      
+      // 发送消息函数
+      function sendMessage(event) {
+        if (event) event.preventDefault();
+        
+        const input = document.getElementById('inputMsg');
+        const message = input.value.trim();
+        
+        if (!message) {
+          // 如果输入为空，聚焦到输入框
+          input.focus();
+          return;
+        }
+        
+        // 显示用户消息
+        addMessageToChat('user', message);
+        
+        // 清空输入框
+        input.value = '';
+        
+        // 发送到服务器
+        fetch('/api/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: message,
+            session_id: currentSessionId
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.reply) {
+            // 显示机器人回复
+            addMessageToChat('bot', data.reply);
+          }
+          // 更新会话列表
+          updateSessionList();
+        })
+        .catch(error => {
+          console.error('发送消息失败:', error);
+          addMessageToChat('bot', '抱歉，消息发送失败，请稍后重试。');
+        });
+      }
+      
+      // 添加消息到聊天窗口
+      function addMessageToChat(role, text) {
+        const messagesContainer = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}-message`;
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.textContent = text;
+        
+        messageDiv.appendChild(messageContent);
+        messagesContainer.appendChild(messageDiv);
+        
+        // 滚动到底部
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      
+      // 加载历史消息
+      function loadHistory() {
+        if (!currentSessionId) return;
+        
+        fetch(`/api/history/${currentSessionId}`)
+        .then(response => response.json())
+        .then(messages => {
+          const messagesContainer = document.getElementById('messages');
+          messagesContainer.innerHTML = '';
+          
+          messages.forEach(msg => {
+            addMessageToChat(msg.role, msg.text);
+          });
+        })
+        .catch(error => {
+          console.error('加载历史消息失败:', error);
+        });
+      }
+      
+      // 更新会话列表
+      function updateSessionList() {
+        fetch('/api/sessions')
+        .then(response => response.json())
+        .then(sessions => {
+          const sessionList = document.getElementById('sessionList');
+          sessionList.innerHTML = '';
+          
+          sessions.forEach(session => {
+            const li = document.createElement('li');
+            li.className = 'session-item';
+            li.textContent = session.title;
+            li.onclick = () => switchSession(session.id);
+            sessionList.appendChild(li);
+          });
+        })
+        .catch(error => {
+          console.error('更新会话列表失败:', error);
+        });
+      }
+      
+      // 切换会话
+      function switchSession(sessionId) {
+        currentSessionId = sessionId;
+        setCookie('chat_sid', sessionId, 7);
+        loadHistory();
+      }
+      
+      // 创建新会话
+      document.getElementById('newSession').addEventListener('click', function() {
+        currentSessionId = generateSessionId();
+        setCookie('chat_sid', currentSessionId, 7);
+        
+        const messagesContainer = document.getElementById('messages');
+        messagesContainer.innerHTML = '';
+        
+        updateSessionList();
+      });
+    </script>
   </body>
 </html>

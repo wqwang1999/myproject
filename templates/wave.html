@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频波形可视化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .audio-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .controls {
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 12px 24px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #startBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #stopBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            opacity: 1;
+        }
+
+        #waveform {
+            width: 100%;
+            height: 200px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .audio-select {
+            margin: 15px 0;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .status {
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="audio-container">
+        <h1>音频波形可视化</h1>
+        
+        <!-- 音频文件选择 -->
+        <div class="audio-select">
+            <input type="file" id="audioFile" accept="audio/*" />
+            <p class="status">请先选择一个音频文件</p>
+        </div>
+        
+        <!-- 控制按钮 -->
+        <div class="controls">
+            <button id="startBtn" disabled>开始播放</button>
+            <button id="stopBtn" disabled>结束播放</button>
+        </div>
+        
+        <!-- 波形画布 -->
+        <canvas id="waveform"></canvas>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const audioFileInput = document.getElementById('audioFile');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const canvas = document.getElementById('waveform');
+        const ctx = canvas.getContext('2d');
+        const statusText = document.querySelector('.status');
+
+        // 音频相关变量
+        let audioContext;
+        let audioElement;
+        let analyser;
+        let source;
+        let animationId;
+        let isPlaying = false;
+
+        // 设置canvas尺寸
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        // 初始化画布
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 选择音频文件
+        audioFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 验证文件类型
+            if (!file.type.startsWith('audio/')) {
+                statusText.textContent = '请选择有效的音频文件';
+                return;
+            }
+
+            // 创建音频元素
+            const audioUrl = URL.createObjectURL(file);
+            audioElement = new Audio(audioUrl);
+            
+            // 启用播放按钮
+            startBtn.disabled = false;
+            statusText.textContent = `已选择: ${file.name}`;
+        });
+
+        // 初始化音频分析器
+        function initAudioAnalyzer() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 2048; // 控制波形精度
+            }
+
+            // 创建音频源
+            source = audioContext.createMediaElementSource(audioElement);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+        }
+
+        // 绘制波形
+        function drawWaveform() {
+            // 获取频域数据
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteTimeDomainData(dataArray);
+
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 设置波形样式
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#4CAF50';
+            ctx.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            // 绘制波形
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+
+            // 持续绘制
+            if (isPlaying) {
+                animationId = requestAnimationFrame(drawWaveform);
+            }
+        }
+
+        // 开始播放
+        startBtn.addEventListener('click', async function() {
+            if (!audioElement) return;
+
+            // 恢复音频上下文（解决浏览器自动暂停问题）
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+
+            // 初始化分析器
+            initAudioAnalyzer();
+
+            // 播放音频
+            audioElement.play()
+                .then(() => {
+                    isPlaying = true;
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    statusText.textContent = '正在播放音频...';
+                    
+                    // 开始绘制波形
+                    drawWaveform();
+                })
+                .catch(error => {
+                    console.error('播放失败:', error);
+                    statusText.textContent = '播放失败: ' + error.message;
+                });
+        });
+
+        // 停止播放
+        stopBtn.addEventListener('click', function() {
+            if (!audioElement) return;
+
+            // 停止音频
+            audioElement.pause();
+            audioElement.currentTime = 0;
+            
+            // 停止绘制
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            
+            // 清理音频源
+            if (source) {
+                source.disconnect();
+                source = null;
+            }
+
+            // 更新UI状态
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            statusText.textContent = '已停止播放';
+        });
+
+        // 音频播放结束事件
+        audioElement?.addEventListener('ended', function() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            statusText.textContent = '音频播放完毕';
+        });
+    </script>
+</body>
+</html>

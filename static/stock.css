@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.stock-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stock-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.stock-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.stock-code {
+    font-size: 1.2rem;
+    color: #666;
+    background: #f5f5f5;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.stock-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 25px;
+}
+
+.current-price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+}
+
+.price-change {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.change-percent {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.positive {
+    color: #4caf50;
+}
+
+.negative {
+    color: #f44336;
+}
+
+.chart-container {
+    height: 200px;
+    margin: 20px 0;
+}
+
+.stock-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.label {
+    font-weight: bold;
+    color: #666;
+}
+
+.value {
+    color: #333;
+    font-weight: 500;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .stock-card {
+        padding: 20px;
+    }
+    
+    .stock-name {
+        font-size: 1.5rem;
+    }
+    
+    .current-price {
+        font-size: 2rem;
+    }
+    
+    .chart-container {
+        height: 150px;
+    }
+    
+    .stock-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 动画效果 */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.stock-price.updated {
+    animation: pulse 0.5s ease-in-out;
+}

@@ -1,3 +1,4 @@
+import requests
 import os
 import logging
 from functools import wraps
@@ -309,8 +310,37 @@ def api_send():
     # append user message
     SESSIONS[sid].append({'role': 'user', 'text': text})
 
-    # bot reply (always "你好")
-    reply = '你好'
+    # Send message to local LLM server with proper format
+    try:
+        # 构造符合要求的请求数据
+        payload = {
+            "model": "deepseek/deepseek-r1-0528-qwen3-8b",
+            "system_prompt": "You are a helpful AI assistant.",
+            "input": text
+        }
+        
+        response = requests.post(
+            'http://192.168.56.1:1234/api/v1/chat',
+            json=payload,
+            headers={'Content-Type': 'application/json'},
+            timeout=3000
+        )
+        response.raise_for_status()
+        
+        # 解析响应数据
+        result = response.json()
+        reply = result.get('reply') or result.get('response') or result.get('output') or '你好'
+        
+    except requests.Timeout:
+        app.logger.error("LLM server request timeout")
+        reply = "抱歉，请求超时，请稍后重试。"
+    except requests.RequestException as e:
+        app.logger.error("Failed to communicate with LLM server: %s", e)
+        reply = "抱歉，暂时无法处理您的请求。"
+    except ValueError as e:
+        app.logger.error("Invalid JSON response from LLM server: %s", e)
+        reply = "抱歉，收到无效响应。"
+
     SESSIONS[sid].append({'role': 'bot', 'text': reply})
 
     resp = make_response(jsonify({'reply': reply, 'session_id': sid, 'history': SESSIONS[sid]}))
@@ -319,4 +349,5 @@ def api_send():
 
 
 if __name__ == '__main__':
-    app.run('127.0.0.1', 5001, debug=True)
+    # 修改为监听所有网络接口，确保外部可以访问
+    app.run('0.0.0.0', 5001, debug=True)

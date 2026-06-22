@@ -1,4 +1,4 @@
-:root{--bg1:#05031a;--glass:rgba(255,255,255,0.04);--muted:#9fb6d6;--accent:#6ee7ff}
+:root{--bg1:#05031a;--glass:rgba(255,255,255,0.04);--muted:#9fb6d6;--accent:#6ee7ff;--primary:#4a9eff;--primary-dark:#3a8eed}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#05031a,#07102a);color:#dff3ff}
 .chat-app{display:flex;min-height:100vh;position:relative;z-index:2}
@@ -14,14 +14,108 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe U
 .chat-header{padding:20px;border-bottom:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
 .title{font-size:18px;font-weight:700}
 .sub{font-size:12px;color:var(--muted)}
-.messages{flex:1;padding:20px;overflow:auto;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:72%;padding:12px 14px;border-radius:12px;line-height:1.4;box-shadow:0 6px 18px rgba(2,6,23,0.6);position:relative}
-.msg.bot{align-self:flex-start;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
-.msg.user{align-self:flex-end;background:linear-gradient(90deg,var(--accent),#8a5cff);color:#021026}
-.meta{font-size:11px;color:var(--muted);margin-top:6px}
-.composer{display:flex;gap:10px;padding:14px;border-top:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.005), rgba(255,255,255,0.01))}
-.input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-.send{background:linear-gradient(90deg,var(--accent),#8a5cff);border:none;padding:10px 16px;border-radius:10px;font-weight:700;color:#021026}
+
+/* 消息气泡样式 */
+.messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #f8f9fa;
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.message:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.user-message {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--primary) 0%, #3a8eed 100%);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #333;
+  border: 1px solid #e9ecef;
+  border-bottom-left-radius: 4px;
+}
+
+.message-content {
+  line-height: 1.5;
+  word-wrap: break-word;
+  font-size: 15px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 输入区域样式 */
+.composer {
+  display: flex;
+  padding: 15px;
+  background-color: white;
+  border-top: 1px solid #eee;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--primary);
+}
+
+.send {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary) 0%, #3a8eed 100%);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.send:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.send:active {
+  transform: translateY(0);
+}
 
 /* animations removed for static UI (instant appearance) */
 .msg{transform-origin: center;animation:none !important;opacity:1 !important}

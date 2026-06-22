@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票实时显示</title>
+    <link rel="stylesheet" href="stock.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>股票实时行情</h1>
+        
+        <div class="stock-card">
+            <div class="stock-header">
+                <span class="stock-name">腾讯控股</span>
+                <span class="stock-code">00700.HK</span>
+            </div>
+            <div class="stock-price">
+                <span class="current-price">¥385.50</span>
+                <span class="price-change positive">+12.50</span>
+                <span class="change-percent positive">+3.35%</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="tencentChart"></canvas>
+            </div>
+            <div class="stock-info">
+                <div class="info-item">
+                    <span class="label">开盘价</span>
+                    <span class="value">¥378.00</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最高价</span>
+                    <span class="value">¥389.20</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最低价</span>
+                    <span class="value">¥375.80</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">成交量</span>
+                    <span class="value">15,842,630</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stock-card">
+            <div class="stock-header">
+                <span class="stock-name">阿里巴巴</span>
+                <span class="stock-code">BABA.NYSE</span>
+            </div>
+            <div class="stock-price">
+                <span class="current-price">$185.75</span>
+                <span class="price-change negative">-8.25</span>
+                <span class="change-percent negative">-4.25%</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="alibabaChart"></canvas>
+            </div>
+            <div class="stock-info">
+                <div class="info-item">
+                    <span class="label">开盘价</span>
+                    <span class="value">$192.00</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最高价</span>
+                    <span class="value">$194.50</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最低价</span>
+                    <span class="value">$183.20</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">成交量</span>
+                    <span class="value">28,456,120</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stock-card">
+            <div class="stock-header">
+                <span class="stock-name">苹果公司</span>
+                <span class="stock-code">AAPL.NASDAQ</span>
+            </div>
+            <div class="stock-price">
+                <span class="current-price">$175.20</span>
+                <span class="price-change positive">+3.80</span>
+                <span class="change-percent positive">+2.22%</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="appleChart"></canvas>
+            </div>
+            <div class="stock-info">
+                <div class="info-item">
+                    <span class="label">开盘价</span>
+                    <span class="value">$172.50</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最高价</span>
+                    <span class="value">$176.80</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">最低价</span>
+                    <span class="value">$171.90</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">成交量</span>
+                    <span class="value">45,678,910</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 图表数据存储
+        const chartData = {
+            tencent: [],
+            alibaba: [],
+            apple: []
+        };
+
+        // 初始化图表
+        function initChart(stockId, ctx) {
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array(20).fill(''),
+                    datasets: [{
+                        label: '价格',
+                        data: Array(20).fill(0),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 创建图表实例
+        const tencentChart = initChart('tencent', document.getElementById('tencentChart').getContext('2d'));
+        const alibabaChart = initChart('alibaba', document.getElementById('alibabaChart').getContext('2d'));
+        const appleChart = initChart('apple', document.getElementById('appleChart').getContext('2d'));
+
+        // 更新图表数据
+        function updateChartData(chart, newData) {
+            chart.data.datasets[0].data.push(newData);
+            chart.data.datasets[0].data.shift();
+            chart.update();
+        }
+
+        // 模拟实时数据更新
+        setInterval(() => {
+            const stocks = document.querySelectorAll('.stock-card');
+            stocks.forEach((stock, index) => {
+                const priceElement = stock.querySelector('.current-price');
+                const changeElement = stock.querySelector('.price-change');
+                const percentElement = stock.querySelector('.change-percent');
+                
+                // 获取当前价格
+                let currentPrice = parseFloat(priceElement.textContent.replace(/[¥$]/, ''));
+                
+                // 随机价格波动
+                const change = (Math.random() - 0.5) * 2;
+                currentPrice += change;
+                
+                // 更新显示
+                priceElement.textContent = priceElement.textContent.includes('¥') ? 
+                    `¥${currentPrice.toFixed(2)}` : `$${currentPrice.toFixed(2)}`;
+                
+                // 更新涨跌
+                if (change >= 0) {
+                    changeElement.textContent = `+${change.toFixed(2)}`;
+                    changeElement.className = 'price-change positive';
+                    percentElement.className = 'change-percent positive';
+                } else {
+                    changeElement.textContent = `${change.toFixed(2)}`;
+                    changeElement.className = 'price-change negative';
+                    percentElement.className = 'change-percent negative';
+                }
+                
+                // 计算涨跌幅百分比
+                const openPrice = parseFloat(stock.querySelector('.info-item .value').textContent.replace(/[$¥,]/g, ''));
+                const changePercent = ((currentPrice - openPrice) / openPrice * 100).toFixed(2);
+                percentElement.textContent = change >= 0 ? `+${changePercent}%` : `${changePercent}%`;
+
+                // 更新图表
+                const chartNames = ['tencent', 'alibaba', 'apple'];
+                const charts = [tencentChart, alibabaChart, appleChart];
+                updateChartData(charts[index], currentPrice);
+            });
+        }, 3000); // 每3秒更新一次
+    </script>
+</body>
+</html>
